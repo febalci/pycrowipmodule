@@ -1,4 +1,5 @@
 # pycrowipmodule
 Async API library for Crow/AAP IP Module...
-The module should be using AAP Firmware for open smart home applications
+The module should be using AAP Firmware for open smart home applications.
+
 This library is written for homeassistant custom component...
