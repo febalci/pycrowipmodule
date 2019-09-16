@@ -1,0 +1,10 @@
+Metadata-Version: 1.2
+Name: pycrowipmodule
+Version: 0.12
+Summary: Library for Crow/AAP Alarm Ip Module
+Home-page: https://github.com/febalci/pycrowipmodule
+Maintainer: febalci
+License: MIT
+Description: UNKNOWN
+Keywords: Crow/AAP Alarm Ip Module for Home Assistant
+Platform: UNKNOWN
