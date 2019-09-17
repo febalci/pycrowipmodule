@@ -6,7 +6,7 @@ import re
 import threading
 
 from pycrowipmodule import StatusState
-from pycrowpmodule.crow_defs import *
+from pycrowipmodule.crow_defs import *
 
 _LOGGER = logging.getLogger(__name__)
 
