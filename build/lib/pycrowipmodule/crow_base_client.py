@@ -102,7 +102,7 @@ class CrowIPModuleClient(asyncio.Protocol):
             
     def send_data(self, data):
         """Raw data send- just make sure it's encoded properly and logged."""
-        _LOGGER.debug(str.format('Sent: {0}', data.encode('ascii')))
+        _LOGGER.debug(str.format('Sent: {0}', (data + '\r\n').encode('ascii')))
         try:
             self._transport.write((data + '\r\n').encode('ascii'))
         except RuntimeError as err:
@@ -189,24 +189,24 @@ class CrowIPModuleClient(asyncio.Protocol):
 
     def arm_stay(self):
         """Public method to arm/stay a partition."""
-        self.send_command(COMMANDS['stay'], '')
+        self.send_command('stay', '')
 
     def arm_away(self):
         """Public method to arm/away a partition."""
-        self.send_command(COMMANDS['arm'], '')
+        self.send_command('arm', '')
 
     def disarm(self, code):
         """Public method to disarm a partition."""
         self._cachedCode = code
-        self.send_command(COMMANDS['disarm'], str(code)+'E')
+        self.send_command('disarm', str(code)+'E')
 
     def panic_alarm(self, panicType):
         """Public method to raise a panic alarm."""
-        self.send_command(COMMANDS['panic'], '')
+        self.send_command('panic', '')
 
     def toggle_output(self, outputNumber):
         """Used to toggle the selected command output"""
-        self.send_command(COMMANDS['toogle_output_x'] + str(outputNumber), '')	
+        self.send_command('toogle_output_x' + str(outputNumber), '')	
 
     def handle_connect_failure(self):
         """Handler for if we fail to connect to the Module."""

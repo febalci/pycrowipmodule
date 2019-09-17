@@ -1,6 +1,6 @@
 Metadata-Version: 1.2
 Name: pycrowipmodule
-Version: 0.12
+Version: 0.15
 Summary: Library for Crow/AAP Alarm Ip Module
 Home-page: https://github.com/febalci/pycrowipmodule
 Maintainer: febalci
