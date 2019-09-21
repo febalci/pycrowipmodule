@@ -116,7 +116,7 @@ class CrowIPModuleClient(asyncio.Protocol):
         if data == '':
             to_send = COMMANDS[code] + ' '
         else:
-            to_send = COMMANDS[code] + data
+            to_send = COMMANDS[code] + ' ' + data
         self.send_data(to_send)
 
     def data_received(self, data):

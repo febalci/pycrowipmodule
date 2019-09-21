@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pycrowipmodule',
-    version='0.16',
+    version='0.17',
     description='Library for Crow/AAP Alarm Ip Module',
     url='https://github.com/febalci/pycrowipmodule',
     maintainer='febalci',
