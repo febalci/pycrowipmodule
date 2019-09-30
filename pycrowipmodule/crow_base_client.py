@@ -160,7 +160,7 @@ class CrowIPModuleClient(asyncio.Protocol):
         result = {}
         if rawInput != '':
             for attribute, format in RESPONSE_FORMATS.items():
-                match = re.search(attribute, rawInput)
+                match = re.match(attribute, rawInput) # 0.18: converted re.search to re.match, SA and ESA mixes up!
                 if match:
                     _LOGGER.debug(str.format('Match found for {0}', attribute))
                     result['attribute'] = format['attr']
@@ -247,5 +247,12 @@ class CrowIPModuleClient(asyncio.Protocol):
         _LOGGER.debug('Setting %s of %s', msg['name'], msg['data'])
         zoneNumber = msg['data']
         self._alarmPanel.zone_state[int(zoneNumber)]['status'][msg['attribute']] = msg['status']
+        if msg['attribute'] == 'alarm':
+            if msg['status']:
+                self._alarmPanel.area_state[1]['status']['alarm_zone']=zoneNumber
+                self._alarmPanel.area_state[2]['status']['alarm_zone']=zoneNumber
+            else:
+                self._alarmPanel.area_state[1]['status']['alarm_zone']=''
+                self._alarmPanel.area_state[2]['status']['alarm_zone']=''
 
         return zoneNumber

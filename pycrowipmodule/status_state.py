@@ -22,7 +22,7 @@ class StatusState:
         for i in range(1, maxAreas+1):
             _areaState[i] = {'status': {'alarm': False, 'armed': False, 'stay_armed': False, 
                                         'disarmed': False,'exit_delay': False, 'stay_exit_delay': False, 
-                                        'comment': '', 'last_disarmed_by_user': '', 
+                                        'alarm_zone': '', 'last_disarmed_by_user': '', 
                                         'last_armed_by_user': '' }}
 
         return _areaState
