@@ -37,7 +37,7 @@ RESPONSE_FORMATS = {
     'DB': {'name': 'Area B Disarmed', 'handler': 'area_state_change','attr': 'disarmed', 'area': '2', 'status': True},
     'EAA': {'name': 'Area A Exit Delay', 'handler': 'area_state_change', 'attr': 'exit_delay', 'area': '1', 'status': True},
     'EAB': {'name': 'Area B Exit Delay', 'handler': 'area_state_change','attr': 'exit_delay', 'area': '2', 'status': True},
-    'ESA': {'name': 'Area A Stay Exit Delay', 'handler': 'area_state_change', 'stay_exit_delay': 'mains', 'area': '1', 'status': True},
+    'ESA': {'name': 'Area A Stay Exit Delay', 'handler': 'area_state_change', 'attr': 'stay_exit_delay', 'area': '1', 'status': True},
     'ESB': {'name': 'Area B Stay Exit Delay', 'handler': 'area_state_change','attr': 'stay_exit_delay', 'area': '2', 'status': True},
 
 # OUTPUT MESSAGES

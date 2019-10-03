@@ -231,16 +231,15 @@ class CrowIPModuleClient(asyncio.Protocol):
             areaNumber = 'A'
         else:
             areaNumber = 'B'
+        
+        # Reset Area Status
+        self._alarmPanel.area_state[int(msg['area'])]['status']['armed'] = False
+        self._alarmPanel.area_state[int(msg['area'])]['status']['stay_armed'] = False
+        self._alarmPanel.area_state[int(msg['area'])]['status']['disarmed'] = False
+        self._alarmPanel.area_state[int(msg['area'])]['status']['exit_delay'] = False
+        self._alarmPanel.area_state[int(msg['area'])]['status']['stay_exit_delay'] = False
+        
         self._alarmPanel.area_state[int(msg['area'])]['status'][msg['attribute']] = msg['status']
-        if msg['attribute'] == 'armed':
-            self._alarmPanel.area_state[int(msg['area'])]['status']['stay_armed'] = False
-            self._alarmPanel.area_state[int(msg['area'])]['status']['disarmed'] = False            
-        elif msg['attribute'] == 'stay_armed':
-            self._alarmPanel.area_state[int(msg['area'])]['status']['armed'] = False
-            self._alarmPanel.area_state[int(msg['area'])]['status']['disarmed'] = False
-        elif msg['attribute'] == 'disarmed':
-            self._alarmPanel.area_state[int(msg['area'])]['status']['armed'] = False
-            self._alarmPanel.area_state[int(msg['area'])]['status']['stay_armed'] = False
         return areaNumber
  
     def handle_zone_state_change(self,msg):
@@ -251,8 +250,12 @@ class CrowIPModuleClient(asyncio.Protocol):
             if msg['status']:
                 self._alarmPanel.area_state[1]['status']['alarm_zone']=zoneNumber
                 self._alarmPanel.area_state[2]['status']['alarm_zone']=zoneNumber
+                self._alarmPanel.area_state[1]['status']['alarm']=True
+                self._alarmPanel.area_state[1]['status']['alarm']=True
             else:
                 self._alarmPanel.area_state[1]['status']['alarm_zone']=''
                 self._alarmPanel.area_state[2]['status']['alarm_zone']=''
+                self._alarmPanel.area_state[1]['status']['alarm']=False
+                self._alarmPanel.area_state[1]['status']['alarm']=False
 
         return zoneNumber
