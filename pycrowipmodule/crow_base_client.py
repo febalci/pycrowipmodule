@@ -199,6 +199,10 @@ class CrowIPModuleClient(asyncio.Protocol):
         """Public method to disarm a partition."""
         self._cachedCode = code
         self.send_command('disarm', str(code)+'E')
+    
+    def send_keys(self, keys):
+        """Public method to disarm a partition."""
+        self.send_command('keys', str(keys)+'E')    
 
     def panic_alarm(self, panicType):
         """Public method to raise a panic alarm."""
@@ -248,14 +252,9 @@ class CrowIPModuleClient(asyncio.Protocol):
         self._alarmPanel.zone_state[int(zoneNumber)]['status'][msg['attribute']] = msg['status']
         if msg['attribute'] == 'alarm':
             if msg['status']:
-                self._alarmPanel.area_state[1]['status']['alarm_zone']=zoneNumber
-                self._alarmPanel.area_state[2]['status']['alarm_zone']=zoneNumber
-                self._alarmPanel.area_state[1]['status']['alarm']=True
-                self._alarmPanel.area_state[1]['status']['alarm']=True
+                self._alarmPanel.area_state[int(msg['area'])]['status']['alarm_zone']=zoneNumber
+                self._alarmPanel.area_state[int(msg['area'])]['status']['alarm']=True
             else:
-                self._alarmPanel.area_state[1]['status']['alarm_zone']=''
-                self._alarmPanel.area_state[2]['status']['alarm_zone']=''
-                self._alarmPanel.area_state[1]['status']['alarm']=False
-                self._alarmPanel.area_state[1]['status']['alarm']=False
-
+                self._alarmPanel.area_state[int(msg['area'])]['status']['alarm_zone']=''
+                self._alarmPanel.area_state[int(msg['area'])]['status']['alarm']=False
         return zoneNumber

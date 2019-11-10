@@ -174,6 +174,13 @@ class CrowIPAlarmPanel():
         else:
             _LOGGER.error(COMMAND_ERR)
 
+    def send_keypress(self, code):
+        """Public method to disarm a partition."""
+        if self._client:
+            self._client.send_keys(code)
+        else:
+            _LOGGER.error(COMMAND_ERR)
+
     def panic_alarm(self, panic_type):
         """Public method to raise a panic alarm."""
         if self._client:
