@@ -38,9 +38,9 @@ class StatusState:
     # System Status State
     @staticmethod
     def get_initial_system_state():
-        _systemState = {'status':{'mains': True, 'battery': False,'tamper': False, 'line': True, 
-                        'dialler': True,'ready': True, 'fuse': True, 'zonebattery': False, 
-                        'pendantbattery': False, 'codetamper': False}}
+        _systemState = {'status':{'mains': True, 'battery': True,'tamper': False, 'line': True, 
+                        'dialler': True,'ready': True, 'fuse': True, 'zonebattery': True, 
+                        'pendantbattery': True, 'codetamper': False}}
         return _systemState
 
 
