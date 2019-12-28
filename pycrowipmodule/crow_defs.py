@@ -41,8 +41,8 @@ RESPONSE_FORMATS = {
     'ESB': {'name': 'Area B Stay Exit Delay', 'handler': 'area_state_change','attr': 'stay_exit_delay', 'area': '2', 'status': True},
 
 # OUTPUT MESSAGES
-    'OO(?P<data>\d+)': {'name': 'Output On', 'handler': 'output_state_change', 'attr': '', 'status': True},
-    'OC(?P<data>\d+)': {'name': 'Output Off', 'handler': 'output_state_change', 'attr': '', 'status': False},
+    'OO(?P<data>\d+)': {'name': 'Output On', 'handler': 'output_state_change', 'attr': 'open', 'status': True},
+    'OC(?P<data>\d+)': {'name': 'Output Off', 'handler': 'output_state_change', 'attr': 'open', 'status': False},
 
 # SYSTEM MESSAGES
     'MF': {'name': 'Mains Fail', 'handler': 'system_state_change', 'attr': 'mains', 'status': False},

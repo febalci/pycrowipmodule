@@ -116,7 +116,10 @@ class CrowIPModuleClient(asyncio.Protocol):
         if data == '':
             to_send = COMMANDS[code] + ' '
         else:
-            to_send = COMMANDS[code] + ' ' + data
+            if COMMANDS[code]=='OO':
+                to_send = COMMANDS[code] + data
+            else:
+                to_send = COMMANDS[code] + ' ' + data
         self.send_data(to_send)
 
     def data_received(self, data):
@@ -210,7 +213,7 @@ class CrowIPModuleClient(asyncio.Protocol):
 
     def toggle_output(self, outputNumber):
         """Used to toggle the selected command output"""
-        self.send_command('toogle_output_x' + str(outputNumber), '')	
+        self.send_command('toogle_output_x', str(outputNumber))	
 
     def handle_connect_failure(self):
         """Handler for if we fail to connect to the Module."""
