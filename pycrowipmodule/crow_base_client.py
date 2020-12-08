@@ -227,7 +227,7 @@ class CrowIPModuleClient(asyncio.Protocol):
         self._connected = False
 # On network lose, retry connecting; change 30 seconds wait to TIMEOUT HA v.0.26
         if not self._shutdown:
-            _LOGGER.error('Unable to connect to envisalink. Reconnecting...')
+            _LOGGER.error('Unable to connect to Crow IP Module. Reconnecting...')
             self._alarmPanel._loginTimeoutCallback(False)
             ensure_future(self.reconnect(self._alarmPanel.connection_timeout), loop=self._eventLoop)
 
