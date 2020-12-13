@@ -4,6 +4,7 @@ import datetime
 import logging
 import re
 import threading
+import time 
 
 from pycrowipmodule import StatusState
 from pycrowipmodule.crow_defs import *
@@ -62,7 +63,7 @@ class CrowIPModuleClient(asyncio.Protocol):
         try:
             await asyncio.wait_for(coro, timeout=self._alarmPanel.connection_timeout)
             """Changed in version 3.7: When aw is cancelled due to a timeout, wait_for waits for aw to be cancelled. Previously, it raised asyncio.TimeoutError immediately."""
-        except asyncio.TimeoutError:
+        except: # asyncio.TimeoutError: HA v.0.26
             _LOGGER.debug('Timeout connecting to Crow IP module...')
             self.handle_connect_failure()
         """        
@@ -80,13 +81,16 @@ class CrowIPModuleClient(asyncio.Protocol):
         self._transport = transport
         self._connected = True
         self._alarmPanel.callback_connected(self._connected)
+# Get Status on first connect to reflect each entity correctly on HA v.0.26
+        if self._connected:
+            self.send_command('status', '')
         
     def connection_lost(self, exc):
         """asyncio callback for connection lost."""
         self._connected = False
         if not self._shutdown:
             _LOGGER.error('The server closed the connection. Reconnecting...')
-            ensure_future(self.reconnect(30), loop=self._eventLoop)
+            ensure_future(self.reconnect(self._alarmPanel.connection_timeout), loop=self._eventLoop)
 
     async def reconnect(self, delay):
         """Internal method for reconnecting."""
@@ -109,7 +113,7 @@ class CrowIPModuleClient(asyncio.Protocol):
             _LOGGER.error(str.format('Failed to write to the stream. Reconnecting. ({0}) ', err))
             self._connected = False
             if not self._shutdown:
-                ensure_future(self.reconnect(30), loop=self._eventLoop)
+                ensure_future(self.reconnect(self._alarmPanel.connection_timeout), loop=self._eventLoop)
 
     def send_command(self, code, data):
         """Send a command in the proper format."""
@@ -202,6 +206,9 @@ class CrowIPModuleClient(asyncio.Protocol):
         """Public method to disarm a partition."""
         self._cachedCode = code
         self.send_command('disarm', str(code)+'E')
+# When disarming EAA, no DA is returned, so correct it with STATUS; on HA v.0.26
+        time.sleep(1)
+        self.send_command('status', '')
 
     def send_keys(self, keys):
         """Public method to disarm a partition."""
@@ -218,8 +225,12 @@ class CrowIPModuleClient(asyncio.Protocol):
     def handle_connect_failure(self):
         """Handler for if we fail to connect to the Module."""
         self._connected = False
-        self.disconnect()
-        self._alarmPanel._loginTimeoutCallback(False)
+# On network lose, retry connecting; change 30 seconds wait to TIMEOUT HA v.0.26
+        if not self._shutdown:
+            _LOGGER.error('Unable to connect to Crow IP Module. Reconnecting...')
+            self._alarmPanel._loginTimeoutCallback(False)
+            ensure_future(self.reconnect(self._alarmPanel.connection_timeout), loop=self._eventLoop)
+
 
     def handle_system_state_change(self,msg):
         _LOGGER.debug('Setting System State %s to %s', msg['name'], str(msg['status']))
