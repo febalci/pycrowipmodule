@@ -194,3 +194,10 @@ class CrowIPAlarmPanel():
             self._client.toggle_output(outputNumber)
         else:
             _LOGGER.error(COMMAND_ERR)
+
+    def relay_on(self, relayNo):
+        """Public method to activate relay 1."""
+        if self._client:
+            self._client.activate_relay(relayNo)
+        else:
+            _LOGGER.error(COMMAND_ERR)
