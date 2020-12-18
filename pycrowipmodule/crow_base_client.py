@@ -63,7 +63,7 @@ class CrowIPModuleClient(asyncio.Protocol):
         try:
             await asyncio.wait_for(coro, timeout=self._alarmPanel.connection_timeout)
             """Changed in version 3.7: When aw is cancelled due to a timeout, wait_for waits for aw to be cancelled. Previously, it raised asyncio.TimeoutError immediately."""
-        except: # asyncio.TimeoutError: HA v.0.26
+        except:
             _LOGGER.debug('Timeout connecting to Crow IP module...')
             self.handle_connect_failure()
         """        
@@ -81,7 +81,6 @@ class CrowIPModuleClient(asyncio.Protocol):
         self._transport = transport
         self._connected = True
         self._alarmPanel.callback_connected(self._connected)
-# Get Status on first connect to reflect each entity correctly on HA v.0.26
         if self._connected:
             self.send_command('status', '')
         
@@ -100,7 +99,7 @@ class CrowIPModuleClient(asyncio.Protocol):
            
     def disconnect(self):
         """Internal method for forcing connection closure if hung."""
-        _LOGGER.debug('Closing connection with server...')
+        _LOGGER.debug('Disconnecting server...')
         if self._transport:
             self._transport.close()
             
@@ -110,7 +109,7 @@ class CrowIPModuleClient(asyncio.Protocol):
         try:
             self._transport.write((data + '\r\n').encode('ascii'))
         except RuntimeError as err:
-            _LOGGER.error(str.format('Failed to write to the stream. Reconnecting. ({0}) ', err))
+            _LOGGER.error(str.format('Failed to send. Reconnecting. ({0}) ', err))
             self._connected = False
             if not self._shutdown:
                 ensure_future(self.reconnect(self._alarmPanel.connection_timeout), loop=self._eventLoop)
@@ -167,7 +166,7 @@ class CrowIPModuleClient(asyncio.Protocol):
         result = {}
         if rawInput != '':
             for attribute, format in RESPONSE_FORMATS.items():
-                match = re.match(attribute, rawInput) # 0.18: converted re.search to re.match, SA and ESA mixes up!
+                match = re.match(attribute, rawInput)
                 if match:
                     _LOGGER.debug(str.format('Match found for {0}', attribute))
                     result['attribute'] = format['attr']
@@ -183,8 +182,9 @@ class CrowIPModuleClient(asyncio.Protocol):
                         result['data'] = ''
                     break
                 else:
-                    _LOGGER.debug(str.format('No Match found for {0}', attribute))
-
+# v.0.27 Commented out for shorter debug log
+#                    _LOGGER.debug(str.format('No Match found for {0}', attribute))
+                  pass
         return result
 
     async def keep_alive(self):
@@ -206,7 +206,6 @@ class CrowIPModuleClient(asyncio.Protocol):
         """Public method to disarm a partition."""
         self._cachedCode = code
         self.send_command('disarm', str(code)+'E')
-# When disarming EAA, no DA is returned, so correct it with STATUS; on HA v.0.26
         time.sleep(1)
         self.send_command('status', '')
 
@@ -225,13 +224,18 @@ class CrowIPModuleClient(asyncio.Protocol):
     def handle_connect_failure(self):
         """Handler for if we fail to connect to the Module."""
         self._connected = False
-# On network lose, retry connecting; change 30 seconds wait to TIMEOUT HA v.0.26
         if not self._shutdown:
-            _LOGGER.error('Unable to connect to Crow IP Module. Reconnecting...')
+            _LOGGER.error('Unable to connect to IP Module. Reconnecting...')
             self._alarmPanel._loginTimeoutCallback(False)
             ensure_future(self.reconnect(self._alarmPanel.connection_timeout), loop=self._eventLoop)
 
-
+    def activate_relay(self, relayNo):
+        """Public method to activate relay 1."""
+        if relayNo == 1:
+            self.send_command('relay_1_on', '')
+        else:
+            self.send_command('relay_2_on', '')
+		
     def handle_system_state_change(self,msg):
         _LOGGER.debug('Setting System State %s to %s', msg['name'], str(msg['status']))
         self._alarmPanel.system_state['status'][msg['attribute']] = msg['status']
