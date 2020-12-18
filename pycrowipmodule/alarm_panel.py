@@ -200,4 +200,4 @@ class CrowIPAlarmPanel():
         if self._client:
             self._client.activate_relay(relayNo)
         else:
-            _LOGGER.error(COMMAND_ERR)
+            _LOGGER.error(COMMAND_ERR) 
