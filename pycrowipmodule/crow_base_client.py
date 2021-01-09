@@ -239,6 +239,9 @@ class CrowIPModuleClient(asyncio.Protocol):
     def handle_system_state_change(self,msg):
         _LOGGER.debug('Setting System State %s to %s', msg['name'], str(msg['status']))
         self._alarmPanel.system_state['status'][msg['attribute']] = msg['status']
+        if msg['attribute'] == 'ready' and msg['status']:
+            _LOGGER.debug('Ready On - Reset All Zones to False')
+            self.all_zones_off()
         return msg['attribute']
 
     def handle_output_state_change(self,msg):
@@ -293,3 +296,12 @@ class CrowIPModuleClient(asyncio.Protocol):
                     _LOGGER.debug("No callback configured for the command."+str(err))
 
         return zoneNumber
+
+    def all_zones_off(self):
+        _LOGGER.debug('ALL ZONES OFF STARTING')
+
+        for zoneNumber in range(1,17): #Check Zone Count
+            if self._alarmPanel.zone_state[int(zoneNumber)]['status']['open']:
+                to_send = 'ZC'+str(zoneNumber)+'/r'
+                _LOGGER.debug('ZONE:'+str(zoneNumber)+' missing closed message. Closing...')
+                self.data_received(to_send.encode('ascii'))
