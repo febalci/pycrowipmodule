@@ -192,7 +192,7 @@ class CrowIPModuleClient(asyncio.Protocol):
         while not self._shutdown:
             if self._connected:
                 self.send_command('status', '')
-            await asyncio.sleep(self._alarmPanel.keepalive_interval, loop=self._eventLoop)
+            await asyncio.sleep(self._alarmPanel.keepalive_interval)
 
     def arm_stay(self):
         """Public method to arm/stay a partition."""
