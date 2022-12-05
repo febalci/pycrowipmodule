@@ -206,7 +206,7 @@ class CrowIPModuleClient(asyncio.Protocol):
         """Public method to disarm a partition."""
         self._cachedCode = code
         self.send_command('disarm', str(code)+'E')
-        time.sleep(1)
+        await asyncio.sleep(1)
         self.send_command('status', '')
 
     def send_keys(self, keys):
