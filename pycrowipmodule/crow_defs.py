@@ -19,14 +19,14 @@ COMMANDS = {
 
 RESPONSE_FORMATS = {
 # ZONE MESSAGES
-    'ZO(?P<data>\d+)': {'name': 'Zone Open', 'handler': 'zone_state_change', 'attr': 'open', 'status': True},
-    'ZC(?P<data>\d+)': {'name': 'Zone Closed', 'handler': 'zone_state_change','attr': 'open', 'status': False},
-    'ZA(?P<data>\d+)': {'name': 'Zone Alarm', 'handler': 'zone_state_change', 'attr': 'alarm', 'status': True},
-    'ZR(?P<data>\d+)': {'name': 'Zone Alarm Restore', 'handler': 'zone_state_change','attr': 'alarm', 'status': False},
-    'ZBY(?P<data>\d+)': {'name': 'Zone Bypass', 'handler': 'zone_state_change', 'attr': 'bypass', 'status': True},
-    'ZBYR(?P<data>\d+)': {'name': 'Zone Bypass Restore', 'handler': 'zone_state_change','attr': 'bypass', 'status': False},
-    'ZTA(?P<data>\d+)': {'name': 'Zone Tamper', 'handler': 'zone_state_change', 'attr': 'tamper', 'status': True},
-    'ZTR(?P<data>\d+)': {'name': 'Zone Tamper Restore', 'handler': 'zone_state_change','attr': 'tamper', 'status': False},
+    r'ZO(?P<data>\d+)': {'name': 'Zone Open', 'handler': 'zone_state_change', 'attr': 'open', 'status': True},
+    r'ZC(?P<data>\d+)': {'name': 'Zone Closed', 'handler': 'zone_state_change','attr': 'open', 'status': False},
+    r'ZA(?P<data>\d+)': {'name': 'Zone Alarm', 'handler': 'zone_state_change', 'attr': 'alarm', 'status': True},
+    r'ZR(?P<data>\d+)': {'name': 'Zone Alarm Restore', 'handler': 'zone_state_change','attr': 'alarm', 'status': False},
+    r'ZBY(?P<data>\d+)': {'name': 'Zone Bypass', 'handler': 'zone_state_change', 'attr': 'bypass', 'status': True},
+    r'ZBYR(?P<data>\d+)': {'name': 'Zone Bypass Restore', 'handler': 'zone_state_change','attr': 'bypass', 'status': False},
+    r'ZTA(?P<data>\d+)': {'name': 'Zone Tamper', 'handler': 'zone_state_change', 'attr': 'tamper', 'status': True},
+    r'ZTR(?P<data>\d+)': {'name': 'Zone Tamper Restore', 'handler': 'zone_state_change','attr': 'tamper', 'status': False},
 
 # AREA MESSAGES
     'AA': {'name': 'Area A Armed', 'handler': 'area_state_change', 'attr': 'armed', 'area': '1', 'status': True},
@@ -41,8 +41,8 @@ RESPONSE_FORMATS = {
     'ESB': {'name': 'Area B Stay Exit Delay', 'handler': 'area_state_change','attr': 'stay_exit_delay', 'area': '2', 'status': True},
 
 # OUTPUT MESSAGES
-    'OO(?P<data>\d+)': {'name': 'Output On', 'handler': 'output_state_change', 'attr': 'open', 'status': True},
-    'OC(?P<data>\d+)': {'name': 'Output Off', 'handler': 'output_state_change', 'attr': 'open', 'status': False},
+    r'OO(?P<data>\d+)': {'name': 'Output On', 'handler': 'output_state_change', 'attr': 'open', 'status': True},
+    r'OC(?P<data>\d+)': {'name': 'Output Off', 'handler': 'output_state_change', 'attr': 'open', 'status': False},
 
 # SYSTEM MESSAGES
     'MF': {'name': 'Mains Fail', 'handler': 'system_state_change', 'attr': 'mains', 'status': False},
